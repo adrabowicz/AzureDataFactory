@@ -41,7 +41,7 @@ namespace ADFv2QuickStart
             return activities;
         }
 
-        public static List<Activity> CreateHttpFileActivities(string httpInputDatasetName, string outputDatasetName)
+        public static List<Activity> CreateHttpActivities(string httpDatasetName, string outputDatasetName)
         {
             var activities = new List<Activity>
                 {
@@ -52,7 +52,7 @@ namespace ADFv2QuickStart
                         {
                             new DatasetReference()
                             {
-                                ReferenceName = httpInputDatasetName,
+                                ReferenceName = httpDatasetName,
                             }
                         },
                         Outputs = new List<DatasetReference>

@@ -33,7 +33,7 @@ namespace ADFv2QuickStart
             var client = new DataFactoryManagementClient(clientCredentials) { SubscriptionId = Config.SubscriptionId };
             LinkedServices.CreateStorageLinkedServiceResource(client, dataFactoryName, linkedServiceName);
             Datasets.CreateBlobStorageDataset(client, dataFactoryName, linkedServiceName, datasetName);
-            Pipelines.CreatePipeline(client, dataFactoryName, datasetName, pipelineName);
+            Pipelines.CreateBlobPipeline(client, dataFactoryName, datasetName, pipelineName);
             Pipelines.RunPipeline(client, dataFactoryName, pipelineName, inputPath, outputPath);
         }
 
@@ -50,7 +50,7 @@ namespace ADFv2QuickStart
             var client = new DataFactoryManagementClient(clientCredentials) { SubscriptionId = Config.SubscriptionId };
             LinkedServices.CreateHttpLinkedServiceResource(client, dataFactoryName, linkedServiceName, baseUrl);
             Datasets.CreateHttpFileDataset(client, dataFactoryName, linkedServiceName, datasetName, relativeUrl);
-            Pipelines.CreatePipeline(client, dataFactoryName, datasetName, pipelineName);
+            Pipelines.CreateHttpPipeline(client, dataFactoryName, datasetName, pipelineName);
           //  Pipelines.RunPipeline(client, dataFactoryName, pipelineName, inputPath, outputPath);
         }
     }

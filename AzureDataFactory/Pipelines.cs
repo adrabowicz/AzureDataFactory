@@ -9,9 +9,8 @@ namespace ADFv2QuickStart
 {
     public static class Pipelines
     {
-        public static void CreatePipeline(DataFactoryManagementClient client, string dataFactoryName, string blobDatasetName, string pipelineName)
+        public static void CreateBlobPipeline(DataFactoryManagementClient client, string dataFactoryName, string blobDatasetName, string pipelineName)
         {
-            Console.WriteLine("Creating pipeline " + pipelineName + "...");
             var pipeline = new PipelineResource
             {
                 Parameters = new Dictionary<string, ParameterSpecification>
@@ -25,8 +24,20 @@ namespace ADFv2QuickStart
             Console.WriteLine(SafeJsonConvert.SerializeObject(pipeline, client.SerializationSettings));
         }
 
+        public static void CreateHttpPipeline(DataFactoryManagementClient client, string dataFactoryName, string httpDatasetName, string pipelineName)
+        {
+            var pipeline = new PipelineResource
+            {
+                Activities = Activities.CreateHttpActivities(httpDatasetName, "")
+            };
+            client.Pipelines.CreateOrUpdate(Config.ResourceGroup, dataFactoryName, pipelineName, pipeline);
+            Console.WriteLine(SafeJsonConvert.SerializeObject(pipeline, client.SerializationSettings));
+        }
+
         public static void RunPipeline(DataFactoryManagementClient client, string dataFactoryName, string pipelineName, string inputBlobPath, string outputBlobPath)
         {
+            Console.WriteLine("Creating pipeline " + pipelineName + "...");
+
             Console.WriteLine("Creating pipeline run...");
             Dictionary<string, object> parameters = new Dictionary<string, object>
             {
