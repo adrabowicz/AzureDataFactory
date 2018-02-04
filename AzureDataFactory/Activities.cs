@@ -5,7 +5,7 @@ namespace ADFv2QuickStart
 {
     public static class Activities
     {
-        public static List<Activity> CreateActivities(string blobDatasetName)
+        public static List<Activity> CreateBlobActivities(string blobDatasetName)
         {
             var activities = new List<Activity>
                 {
@@ -40,5 +40,34 @@ namespace ADFv2QuickStart
                 };
             return activities;
         }
+
+        public static List<Activity> CreateHttpFileActivities(string httpInputDatasetName, string outputDatasetName)
+        {
+            var activities = new List<Activity>
+                {
+                    new CopyActivity
+                    {
+                        Name = "CopyFromHttp",
+                        Inputs = new List<DatasetReference>
+                        {
+                            new DatasetReference()
+                            {
+                                ReferenceName = httpInputDatasetName,
+                            }
+                        },
+                        Outputs = new List<DatasetReference>
+                        {
+                            new DatasetReference
+                            {
+                                ReferenceName = outputDatasetName,
+                            }
+                        },
+                        Source = new HttpSource { },
+                        Sink = new BlobSink { }
+                    }
+                };
+            return activities;
+        }
+
     }
 }

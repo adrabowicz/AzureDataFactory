@@ -19,7 +19,7 @@ namespace ADFv2QuickStart
                     { "inputPath", new ParameterSpecification { Type = ParameterType.String } },
                     { "outputPath", new ParameterSpecification { Type = ParameterType.String } }
                 },
-                Activities = Activities.CreateActivities(blobDatasetName)
+                Activities = Activities.CreateBlobActivities(blobDatasetName)
             };
             client.Pipelines.CreateOrUpdate(Config.ResourceGroup, dataFactoryName, pipelineName, pipeline);
             Console.WriteLine(SafeJsonConvert.SerializeObject(pipeline, client.SerializationSettings));
