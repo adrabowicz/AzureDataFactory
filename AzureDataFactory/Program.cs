@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Linq;
-using Microsoft.Azure.Management.ResourceManager;
 using Microsoft.Azure.Management.DataFactory;
-using Microsoft.Azure.Management.DataFactory.Models;
 
 namespace ADFv2QuickStart
 {
@@ -28,16 +25,33 @@ namespace ADFv2QuickStart
             var dataFactoryName = "DevDataFactory1";
             var linkedServiceName = "AzureStorageLinkedService";
             var datasetName = "BlobDataset";
-            var pipelineName = "CopyFormFolderToFolder";
+            var pipelineName = "CopyFromFolderToFolder";
             var inputPath = "adftutorial/input";
             var outputPath = "firsttest";
 
             var clientCredentials = Plumbing.Authenticate();
             var client = new DataFactoryManagementClient(clientCredentials) { SubscriptionId = Config.SubscriptionId };
             LinkedServices.CreateStorageLinkedServiceResource(client, dataFactoryName, linkedServiceName);
-            Datasets.CreateBlobDataset(client, dataFactoryName, linkedServiceName, datasetName);
+            Datasets.CreateBlobStorageDataset(client, dataFactoryName, linkedServiceName, datasetName);
             Pipelines.CreatePipeline(client, dataFactoryName, datasetName, pipelineName);
             Pipelines.RunPipeline(client, dataFactoryName, pipelineName, inputPath, outputPath);
+        }
+
+        private static void CopyFormHttpEndpoint()
+        {
+            var dataFactoryName = "DevDataFactory1";
+            var linkedServiceName = "AzureHttpLinkedService";
+            var baseUrl = "";
+            var datasetName = "HttpFileDataset";
+            var relativeUrl = "";
+            var pipelineName = "CopyFromHttpEndpoint";
+
+            var clientCredentials = Plumbing.Authenticate();
+            var client = new DataFactoryManagementClient(clientCredentials) { SubscriptionId = Config.SubscriptionId };
+            LinkedServices.CreateHttpLinkedServiceResource(client, dataFactoryName, linkedServiceName, baseUrl);
+            Datasets.CreateHttpFileDataset(client, dataFactoryName, linkedServiceName, datasetName, relativeUrl);
+            Pipelines.CreatePipeline(client, dataFactoryName, datasetName, pipelineName);
+          //  Pipelines.RunPipeline(client, dataFactoryName, pipelineName, inputPath, outputPath);
         }
     }
 }

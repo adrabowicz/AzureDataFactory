@@ -21,12 +21,12 @@ namespace ADFv2QuickStart
             CreateLinkedServiceResource(client, dataFactoryName, linkedServiceName, properties);
         }
 
-        public static void CreateHttpLinkedServiceResource(DataFactoryManagementClient client, string dataFactoryName, string linkedServiceName)
+        public static void CreateHttpLinkedServiceResource(DataFactoryManagementClient client, string dataFactoryName, string linkedServiceName, string baseUrl)
         {
             var properties = new HttpLinkedService
             {
                 AuthenticationType = "Anonymous",
-                Url = "",   // base url of the web server
+                Url = baseUrl,   // base url of the web server
                 EnableServerCertificateValidation = false
             };
             CreateLinkedServiceResource(client, dataFactoryName, linkedServiceName, properties);

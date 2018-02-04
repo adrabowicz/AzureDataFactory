@@ -8,7 +8,7 @@ namespace ADFv2QuickStart
 {
     public static class Datasets
     {
-        public static void CreateBlobDataset(DataFactoryManagementClient client, string dataFactoryName, string linkedServiceName, string blobDatasetName)
+        public static void CreateBlobStorageDataset(DataFactoryManagementClient client, string dataFactoryName, string linkedServiceName, string blobDatasetName)
         {
             var properties = new AzureBlobDataset
             {
@@ -24,6 +24,19 @@ namespace ADFv2QuickStart
                 {
                     { "path", new ParameterSpecification { Type = ParameterType.String } }
                 }
+            };
+            CreateDataset(client, dataFactoryName, blobDatasetName, properties);
+        }
+
+        public static void CreateHttpFileDataset(DataFactoryManagementClient client, string dataFactoryName, string linkedServiceName, 
+                                                    string blobDatasetName, string relativeUrl)
+        {
+            var properties = new HttpDataset // a file from http web server
+            {
+                // A relative URL to the resource that contains the data. 
+                // When this property is not specified, only the URL specified in the linked service definition is used.
+                RelativeUrl = relativeUrl,
+                RequestMethod = "Get"
             };
             CreateDataset(client, dataFactoryName, blobDatasetName, properties);
         }
