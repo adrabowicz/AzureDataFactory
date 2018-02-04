@@ -11,17 +11,17 @@ namespace ADFv2QuickStart
 {
     public static class LinkedServices
     {
-        public static void CreateLinkedServiceResource(DataFactoryManagementClient client)
+        public static void CreateStorageLinkedServiceResource(DataFactoryManagementClient client, string dataFactoryName, string linkedServiceName)
         {
 
-            Console.WriteLine("Creating linked service " + Config.StorageLinkedServiceName + "...");
-            var linkedServiceResource = new LinkedServiceResource(
-                new AzureStorageLinkedService
-                {
-                    ConnectionString = new SecureString("DefaultEndpointsProtocol=https;AccountName=" + Config.StorageAccount + ";AccountKey=" + Config.StorageKey)
-                }
-            );
-            client.LinkedServices.CreateOrUpdate(Config.ResourceGroup, Config.DataFactoryName, Config.StorageLinkedServiceName, linkedServiceResource);
+            Console.WriteLine("Creating linked service " + linkedServiceName + "...");
+            var connectionString = "DefaultEndpointsProtocol=https;AccountName=" + Config.StorageAccount + ";AccountKey=" + Config.StorageKey;
+            var properties = new AzureStorageLinkedService
+            {
+                ConnectionString = new SecureString(connectionString)
+            };
+            var linkedServiceResource = new LinkedServiceResource(properties);
+            client.LinkedServices.CreateOrUpdate(Config.ResourceGroup, dataFactoryName, linkedServiceName, linkedServiceResource);
             Console.WriteLine(SafeJsonConvert.SerializeObject(linkedServiceResource, client.SerializationSettings));
         }
     }
