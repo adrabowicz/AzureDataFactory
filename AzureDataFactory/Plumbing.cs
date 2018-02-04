@@ -18,22 +18,27 @@ namespace ADFv2QuickStart
             return serviceClientCredentials;
         }
 
-        public static void CreateDataFactory(DataFactoryManagementClient client)
+        public static void CreateDataFactory(DataFactoryManagementClient client, string dataFactoryName)
         {
-            Console.WriteLine("Creating data factory " + Config.DataFactoryName + "...");
+            Console.WriteLine("Creating data factory " + dataFactoryName + "...");
             var dataFactory = new Factory
             {
                 Location = Config.Region,
                 Identity = new FactoryIdentity()
             };
-            client.Factories.CreateOrUpdate(Config.ResourceGroup, Config.DataFactoryName, dataFactory);
+            client.Factories.CreateOrUpdate(Config.ResourceGroup, dataFactoryName, dataFactory);
             Console.WriteLine(SafeJsonConvert.SerializeObject(dataFactory, client.SerializationSettings));
 
-            while (client.Factories.Get(Config.ResourceGroup, Config.DataFactoryName).ProvisioningState == "PendingCreation")
+            while (client.Factories.Get(Config.ResourceGroup, dataFactoryName).ProvisioningState == "PendingCreation")
             {
                 System.Threading.Thread.Sleep(1000);
             }
         }
 
+        public static void DeleteDataFactory(DataFactoryManagementClient client, string dataFactoryName)
+        {
+            Console.WriteLine("Deleting the data factory");
+            client.Factories.Delete(Config.ResourceGroup, dataFactoryName);
+        }
     }
 }

@@ -9,13 +9,7 @@ namespace ADFv2QuickStart
         public static string SubscriptionId = "ebd55bf0-71a6-475a-b797-f09d9554453c";
         public static string ResourceGroup = "MedKP";
         public static string Region = "East US 2";
-        public static string DataFactoryName = "DevDataFactory1";
         public static string StorageAccount = "appdevalbert";
         public static string StorageKey = "bwNa/YF5HE9VDJF7fSblHU0MTQ+yYCH7QbHftQQJnFBHU8eNYFVG++XKkXqlDAjL3N8mkYMHpvtMWbK1AZM0eQ==";
-        public static string StorageLinkedServiceName = "AzureStorageLinkedService";
-        public static string InputBlobPath = "adftutorial/input";
-        public static string OutputBlobPath = "firsttest";
-        public static string BlobDatasetName = "BlobDataset";
-        public static string PipelineName = "Adfv2QuickStartPipeline";
     }
 }

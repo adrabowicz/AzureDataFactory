@@ -12,7 +12,7 @@ namespace ADFv2QuickStart
         {
             try
             {
-                Run();
+                CopyFormBlobFolderToBlobFolder();
             }
             catch (Exception e)
             {
@@ -23,18 +23,21 @@ namespace ADFv2QuickStart
             Console.ReadKey();
         }
 
-        private static void Run()
+        private static void CopyFormBlobFolderToBlobFolder()
         {
+            var dataFactoryName = "DevDataFactory1";
+            var linkedServiceName = "AzureStorageLinkedService";
+            var datasetName = "BlobDataset";
+            var pipelineName = "CopyFormFolderToFolder";
+            var inputPath = "adftutorial/input";
+            var outputPath = "firsttest";
+
             var clientCredentials = Plumbing.Authenticate();
             var client = new DataFactoryManagementClient(clientCredentials) { SubscriptionId = Config.SubscriptionId };
-            // Plumbing.CreateDataFactory(client);
-            LinkedServices.CreateStorageLinkedServiceResource(client, Config.DataFactoryName, Config.StorageLinkedServiceName);
-            Datasets.CreateBlobDataset(client, Config.DataFactoryName, Config.BlobDatasetName);
-            Pipelines.CreatePipeline(client);
-            Pipelines.RunPipeline(client);
-
-            //Console.WriteLine("Deleting the data factory");
-            //client.Factories.Delete(resourceGroup, dataFactoryName);
+            LinkedServices.CreateStorageLinkedServiceResource(client, dataFactoryName, linkedServiceName);
+            Datasets.CreateBlobDataset(client, dataFactoryName, linkedServiceName, datasetName);
+            Pipelines.CreatePipeline(client, dataFactoryName, datasetName, pipelineName);
+            Pipelines.RunPipeline(client, dataFactoryName, pipelineName, inputPath, outputPath);
         }
     }
 }

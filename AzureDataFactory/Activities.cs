@@ -5,7 +5,7 @@ namespace ADFv2QuickStart
 {
     public static class Activities
     {
-        public static List<Activity> CreateActivities()
+        public static List<Activity> CreateActivities(string blobDatasetName)
         {
             var activities = new List<Activity>
                 {
@@ -16,7 +16,7 @@ namespace ADFv2QuickStart
                         {
                             new DatasetReference()
                             {
-                                ReferenceName = Config.BlobDatasetName,
+                                ReferenceName = blobDatasetName,
                                 Parameters = new Dictionary<string, object>
                                 {
                                     { "path", "@pipeline().parameters.inputPath" }
@@ -27,7 +27,7 @@ namespace ADFv2QuickStart
                         {
                             new DatasetReference
                             {
-                                ReferenceName = Config.BlobDatasetName,
+                                ReferenceName = blobDatasetName,
                                 Parameters = new Dictionary<string, object>
                                 {
                                     { "path", "@pipeline().parameters.outputPath" }

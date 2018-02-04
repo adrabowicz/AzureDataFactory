@@ -9,9 +9,9 @@ namespace ADFv2QuickStart
 {
     public static class Pipelines
     {
-        public static void CreatePipeline(DataFactoryManagementClient client)
+        public static void CreatePipeline(DataFactoryManagementClient client, string dataFactoryName, string blobDatasetName, string pipelineName)
         {
-            Console.WriteLine("Creating pipeline " + Config.PipelineName + "...");
+            Console.WriteLine("Creating pipeline " + pipelineName + "...");
             var pipeline = new PipelineResource
             {
                 Parameters = new Dictionary<string, ParameterSpecification>
@@ -19,28 +19,28 @@ namespace ADFv2QuickStart
                     { "inputPath", new ParameterSpecification { Type = ParameterType.String } },
                     { "outputPath", new ParameterSpecification { Type = ParameterType.String } }
                 },
-                Activities = Activities.CreateActivities()
+                Activities = Activities.CreateActivities(blobDatasetName)
             };
-            client.Pipelines.CreateOrUpdate(Config.ResourceGroup, Config.DataFactoryName, Config.PipelineName, pipeline);
+            client.Pipelines.CreateOrUpdate(Config.ResourceGroup, dataFactoryName, pipelineName, pipeline);
             Console.WriteLine(SafeJsonConvert.SerializeObject(pipeline, client.SerializationSettings));
         }
 
-        public static void RunPipeline(DataFactoryManagementClient client)
+        public static void RunPipeline(DataFactoryManagementClient client, string dataFactoryName, string pipelineName, string inputBlobPath, string outputBlobPath)
         {
             Console.WriteLine("Creating pipeline run...");
             Dictionary<string, object> parameters = new Dictionary<string, object>
             {
-                { "inputPath", Config.InputBlobPath },
-                { "outputPath", Config.OutputBlobPath }
+                { "inputPath", inputBlobPath },
+                { "outputPath", outputBlobPath }
             };
-            var runResponse = client.Pipelines.CreateRunWithHttpMessagesAsync(Config.ResourceGroup, Config.DataFactoryName, Config.PipelineName, parameters).Result.Body;
+            var runResponse = client.Pipelines.CreateRunWithHttpMessagesAsync(Config.ResourceGroup, dataFactoryName, pipelineName, parameters).Result.Body;
             Console.WriteLine("Pipeline run ID: " + runResponse.RunId);
 
             Console.WriteLine("Checking pipeline run status...");
             PipelineRun pipelineRun;
             while (true)
             {
-                pipelineRun = client.PipelineRuns.Get(Config.ResourceGroup, Config.DataFactoryName, runResponse.RunId);
+                pipelineRun = client.PipelineRuns.Get(Config.ResourceGroup, dataFactoryName, runResponse.RunId);
                 Console.WriteLine("Status: " + pipelineRun.Status);
                 if (pipelineRun.Status == "InProgress")
                     System.Threading.Thread.Sleep(15000);
@@ -51,7 +51,7 @@ namespace ADFv2QuickStart
             Console.WriteLine("Checking copy activity run details...");
 
             var activityRuns = client.ActivityRuns.ListByPipelineRun(
-                                Config.ResourceGroup, Config.DataFactoryName, runResponse.RunId, DateTime.UtcNow.AddMinutes(-10),
+                                Config.ResourceGroup, dataFactoryName, runResponse.RunId, DateTime.UtcNow.AddMinutes(-10),
                                 DateTime.UtcNow.AddMinutes(10)).ToList();
             if (pipelineRun.Status == "Succeeded")
             {
