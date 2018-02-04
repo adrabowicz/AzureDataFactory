@@ -29,7 +29,7 @@ namespace ADFv2QuickStart
             var client = new DataFactoryManagementClient(clientCredentials) { SubscriptionId = Config.SubscriptionId };
             // Plumbing.CreateDataFactory(client);
             LinkedServices.CreateStorageLinkedServiceResource(client, Config.DataFactoryName, Config.StorageLinkedServiceName);
-            Datasets.CreateDataset(client);
+            Datasets.CreateBlobDataset(client, Config.DataFactoryName, Config.BlobDatasetName);
             Pipelines.CreatePipeline(client);
             Pipelines.RunPipeline(client);
 
