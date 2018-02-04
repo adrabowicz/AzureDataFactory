@@ -16,7 +16,7 @@ namespace ADFv2QuickStart
                         {
                             new DatasetReference()
                             {
-                                ReferenceName = Config.blobDatasetName,
+                                ReferenceName = Config.BlobDatasetName,
                                 Parameters = new Dictionary<string, object>
                                 {
                                     { "path", "@pipeline().parameters.inputPath" }
@@ -27,7 +27,7 @@ namespace ADFv2QuickStart
                         {
                             new DatasetReference
                             {
-                                ReferenceName = Config.blobDatasetName,
+                                ReferenceName = Config.BlobDatasetName,
                                 Parameters = new Dictionary<string, object>
                                 {
                                     { "path", "@pipeline().parameters.outputPath" }

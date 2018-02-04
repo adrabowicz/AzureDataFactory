@@ -11,7 +11,7 @@ namespace ADFv2QuickStart
     {
         public static void CreatePipeline(DataFactoryManagementClient client)
         {
-            Console.WriteLine("Creating pipeline " + Config.pipelineName + "...");
+            Console.WriteLine("Creating pipeline " + Config.PipelineName + "...");
             var pipeline = new PipelineResource
             {
                 Parameters = new Dictionary<string, ParameterSpecification>
@@ -21,7 +21,7 @@ namespace ADFv2QuickStart
                 },
                 Activities = Activities.CreateActivities()
             };
-            client.Pipelines.CreateOrUpdate(Config.resourceGroup, Config.dataFactoryName, Config.pipelineName, pipeline);
+            client.Pipelines.CreateOrUpdate(Config.ResourceGroup, Config.DataFactoryName, Config.PipelineName, pipeline);
             Console.WriteLine(SafeJsonConvert.SerializeObject(pipeline, client.SerializationSettings));
         }
 
@@ -30,17 +30,17 @@ namespace ADFv2QuickStart
             Console.WriteLine("Creating pipeline run...");
             Dictionary<string, object> parameters = new Dictionary<string, object>
             {
-                { "inputPath", Config.inputBlobPath },
-                { "outputPath", Config.outputBlobPath }
+                { "inputPath", Config.InputBlobPath },
+                { "outputPath", Config.OutputBlobPath }
             };
-            var runResponse = client.Pipelines.CreateRunWithHttpMessagesAsync(Config.resourceGroup, Config.dataFactoryName, Config.pipelineName, parameters).Result.Body;
+            var runResponse = client.Pipelines.CreateRunWithHttpMessagesAsync(Config.ResourceGroup, Config.DataFactoryName, Config.PipelineName, parameters).Result.Body;
             Console.WriteLine("Pipeline run ID: " + runResponse.RunId);
 
             Console.WriteLine("Checking pipeline run status...");
             PipelineRun pipelineRun;
             while (true)
             {
-                pipelineRun = client.PipelineRuns.Get(Config.resourceGroup, Config.dataFactoryName, runResponse.RunId);
+                pipelineRun = client.PipelineRuns.Get(Config.ResourceGroup, Config.DataFactoryName, runResponse.RunId);
                 Console.WriteLine("Status: " + pipelineRun.Status);
                 if (pipelineRun.Status == "InProgress")
                     System.Threading.Thread.Sleep(15000);
@@ -51,7 +51,7 @@ namespace ADFv2QuickStart
             Console.WriteLine("Checking copy activity run details...");
 
             var activityRuns = client.ActivityRuns.ListByPipelineRun(
-                                Config.resourceGroup, Config.dataFactoryName, runResponse.RunId, DateTime.UtcNow.AddMinutes(-10),
+                                Config.ResourceGroup, Config.DataFactoryName, runResponse.RunId, DateTime.UtcNow.AddMinutes(-10),
                                 DateTime.UtcNow.AddMinutes(10)).ToList();
             if (pipelineRun.Status == "Succeeded")
             {

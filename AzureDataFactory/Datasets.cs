@@ -13,13 +13,13 @@ namespace ADFv2QuickStart
     {
         public static void CreateDataset(DataFactoryManagementClient client)
         {
-            Console.WriteLine("Creating dataset " + Config.blobDatasetName + "...");
+            Console.WriteLine("Creating dataset " + Config.BlobDatasetName + "...");
             var blobDataset = new DatasetResource(
                 new AzureBlobDataset
                 {
                     LinkedServiceName = new LinkedServiceReference
                     {
-                        ReferenceName = Config.storageLinkedServiceName
+                        ReferenceName = Config.StorageLinkedServiceName
                     },
                     FolderPath = new Expression { Value = "@{dataset().path}" },
                     Parameters = new Dictionary<string, ParameterSpecification>
@@ -28,7 +28,7 @@ namespace ADFv2QuickStart
                     }
                 }
             );
-            client.Datasets.CreateOrUpdate(Config.resourceGroup, Config.dataFactoryName, Config.blobDatasetName, blobDataset);
+            client.Datasets.CreateOrUpdate(Config.ResourceGroup, Config.DataFactoryName, Config.BlobDatasetName, blobDataset);
             Console.WriteLine(SafeJsonConvert.SerializeObject(blobDataset, client.SerializationSettings));
         }
     }

@@ -11,8 +11,8 @@ namespace ADFv2QuickStart
     {
         public static TokenCredentials Authenticate()
         {
-            var context = new AuthenticationContext("https://login.windows.net/" + Config.tenantID);
-            var clientCredentials = new ClientCredential(Config.applicationId, Config.authenticationKey);
+            var context = new AuthenticationContext("https://login.windows.net/" + Config.TenantID);
+            var clientCredentials = new ClientCredential(Config.ApplicationId, Config.AuthenticationKey);
             var result = context.AcquireTokenAsync("https://management.azure.com/", clientCredentials).Result;
             var serviceClientCredentials = new TokenCredentials(result.AccessToken);
             return serviceClientCredentials;
@@ -20,16 +20,16 @@ namespace ADFv2QuickStart
 
         public static void CreateDataFactory(DataFactoryManagementClient client)
         {
-            Console.WriteLine("Creating data factory " + Config.dataFactoryName + "...");
+            Console.WriteLine("Creating data factory " + Config.DataFactoryName + "...");
             var dataFactory = new Factory
             {
-                Location = Config.region,
+                Location = Config.Region,
                 Identity = new FactoryIdentity()
             };
-            client.Factories.CreateOrUpdate(Config.resourceGroup, Config.dataFactoryName, dataFactory);
+            client.Factories.CreateOrUpdate(Config.ResourceGroup, Config.DataFactoryName, dataFactory);
             Console.WriteLine(SafeJsonConvert.SerializeObject(dataFactory, client.SerializationSettings));
 
-            while (client.Factories.Get(Config.resourceGroup, Config.dataFactoryName).ProvisioningState == "PendingCreation")
+            while (client.Factories.Get(Config.ResourceGroup, Config.DataFactoryName).ProvisioningState == "PendingCreation")
             {
                 System.Threading.Thread.Sleep(1000);
             }
